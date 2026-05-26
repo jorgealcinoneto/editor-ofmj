@@ -386,6 +386,17 @@ function App() {
           </div>
         )}
         <div className="ed-bar__actions">
+          {marcaId === 'ofmj' && (
+            <a
+              href="marcas/ofmj/canvas.html"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="ed-btn ed-btn--ghost"
+              title="Visão panorâmica de todos os templates OFMJ"
+            >
+              Canvas ↗
+            </a>
+          )}
           {marca.allowTweaks && (
             <button type="button" className="ed-btn ed-btn--ghost" onClick={resetTemplate}>
               Repor defaults

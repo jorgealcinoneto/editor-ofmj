@@ -96,7 +96,8 @@ body {
 .ed-btn:disabled { opacity: 0.55; cursor: progress; }
 .ed-btn--primary { background: var(--ed-accent); color: #fff; }
 .ed-btn--primary:hover:not(:disabled) { background: #5e242b; }
-.ed-btn--ghost { background: transparent; color: var(--ed-bar-text); border-color: rgba(245,241,232,0.25); }
+.ed-btn--ghost { background: transparent; color: var(--ed-bar-text); border-color: rgba(245,241,232,0.25); text-decoration: none; }
+a.ed-btn--ghost:hover { color: var(--ed-bar-text); }
 .ed-btn--ghost:hover { background: rgba(245,241,232,0.08); }
 
 /* ============================================

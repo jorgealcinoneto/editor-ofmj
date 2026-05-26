@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Canvas — @ofantasticomundodejorge</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Canvas Figma-like: visão panorâmica dos templates OFMJ. Export PNG 3× por slide via menu ⋯.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<style>
+  html, body { margin:0; padding:0; background:#f0eee9; height:100%; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif; }
+  #root { height:100vh; }
+  .fmj-skip{position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden}
+  .fmj-skip:focus{left:16px;top:16px;width:auto;height:auto;padding:10px 14px;z-index:9999;
+    background:#fff;border-radius:8px;box-shadow:0 4px 20px rgba(0,0,0,.15);font-size:14px}
+  .fmj-export-hint{position:fixed;left:16px;bottom:16px;z-index:100;max-width:280px;padding:10px 14px;
+    font-size:12px;line-height:1.45;color:rgba(40,30,20,.85);background:rgba(255,255,255,.92);
+    border-radius:10px;box-shadow:0 4px 20px rgba(0,0,0,.1);pointer-events:none}
+  .fmj-back{position:fixed;left:16px;top:16px;z-index:101;padding:8px 14px;
+    font-size:12px;font-weight:500;color:#1a1612;background:rgba(255,255,255,.95);
+    border-radius:999px;text-decoration:none;box-shadow:0 4px 16px rgba(0,0,0,.08);
+    border:1px solid rgba(26,22,18,.1)}
+  .fmj-back:hover{background:#fff}
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+  }
+</style>
+<script src="https://unpkg.com/react@18.3.1/umd/react.production.min.js" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" crossorigin="anonymous"></script>
+</head>
+<body>
+<a class="fmj-skip" href="#root">Ir para o canvas</a>
+<a class="fmj-back" href="../../index.html">← Editor</a>
+<p class="fmj-export-hint" aria-hidden="true"><strong>Exportar:</strong> ⋯ no canto de cada slide → Download PNG (3×, ex. 3240×4050)</p>
+<div id="root"></div>
+
+<script type="text/babel" src="canvas/design-canvas.jsx"></script>
+<script type="text/babel" src="canvas/tweaks-panel.jsx"></script>
+<script type="text/babel" src="templates.jsx"></script>
+
+<script type="text/babel">
+const TWEAK_DEFAULTS = {
+  palette: 'pergaminho',
+  accent: 'borgonha',
+  layout: 'centered',
+  watermark: false,
+  showGrid: false,
+};
+
+function App() {
+  const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
+
+  const paletteOptions = [
+    { value: 'pergaminho',  label: 'Pergaminho' },
+    { value: 'vigilia',     label: 'Vigília' },
+    { value: 'quaresma',    label: 'Quaresma' },
+    { value: 'tintaNua',    label: 'Tinta nua' },
+  ];
+
+  const paletteSwatches = [
+    [PALETTES.pergaminho.paper,  PALETTES.pergaminho.ink, '#722f37'],
+    [PALETTES.vigilia.paper,     PALETTES.vigilia.ink,    '#a87a35'],
+    [PALETTES.quaresma.paper,    PALETTES.quaresma.ink,   '#a87a35'],
+    [PALETTES.tintaNua.paper,    PALETTES.tintaNua.ink,   '#8a2a1a'],
+  ];
+  const accentSwatches = [
+    ACCENTS.borgonha.color,
+    ACCENTS.ouro.color,
+    ACCENTS.vermelhoSeco.color,
+    ACCENTS.indigo.color,
+  ];
+
+  const paletteFromSwatch = (sw) => {
+    const idx = paletteSwatches.findIndex((s) => JSON.stringify(s) === JSON.stringify(sw));
+    return paletteOptions[idx >= 0 ? idx : 0].value;
+  };
+  const accentFromSwatch = (c) => {
+    const k = Object.keys(ACCENTS).find((k) => ACCENTS[k].color === c);
+    return k || 'borgonha';
+  };
+
+  return (
+    <>
+      <DesignCanvas>
+        <DCSection id="carrossel" title="Carrossel editorial · 6 slides" subtitle="O que são ícones cristãos? — Pilar II · Tradição viva">
+          <DCArtboard id="s1" label="01 · Capa"        width={1080} height={1350}><S01_Capa            tweak={t} /></DCArtboard>
+          <DCArtboard id="s2" label="02 · Definição"   width={1080} height={1350}><S02_Definicao       tweak={t} /></DCArtboard>
+          <DCArtboard id="s3" label="03 · Citação"     width={1080} height={1350}><S03_Citacao         tweak={t} /></DCArtboard>
+          <DCArtboard id="s4" label="04 · Tese"        width={1080} height={1350}><S04_TeologiaEmCores tweak={t} /></DCArtboard>
+          <DCArtboard id="s5" label="05 · Lista"       width={1080} height={1350}><S05_Lista           tweak={t} /></DCArtboard>
+          <DCArtboard id="s6" label="06 · Fecho · CTA" width={1080} height={1350}><S06_Fecho           tweak={t} /></DCArtboard>
+        </DCSection>
+
+        <DCSection id="standalone" title="Posts standalone" subtitle="Liturgia / calendário · Recomendação de leitura · Caderno">
+          <DCArtboard id="lit" label="Liturgia · Adventus" width={1080} height={1350}><T_Liturgia tweak={t} /></DCArtboard>
+          <DCArtboard id="lei" label="Recomendação de leitura" width={1080} height={1350}><T_Leitura tweak={t} /></DCArtboard>
+          <DCArtboard id="cad" label="Caderno · bastidores" width={1080} height={1350}><T_Caderno tweak={t} /></DCArtboard>
+        </DCSection>
+
+        <DCSection id="story" title="Story · 9:16" subtitle="Citação rápida · 1080 × 1920">
+          <DCArtboard id="st1" label="Story · citação" width={1080} height={1920}><T_Story tweak={t} /></DCArtboard>
+        </DCSection>
+      </DesignCanvas>
+
+      <TweaksPanel title="Tweaks">
+        <TweakSection label="Modo & paleta" />
+        <TweakColor
+          label="Paleta"
+          value={paletteSwatches[paletteOptions.findIndex(o => o.value === t.palette)] || paletteSwatches[0]}
+          options={paletteSwatches}
+          onChange={(sw) => setTweak('palette', paletteFromSwatch(sw))}
+        />
+        <TweakColor
+          label="Acento"
+          value={ACCENTS[t.accent]?.color || ACCENTS.borgonha.color}
+          options={accentSwatches}
+          onChange={(c) => setTweak('accent', accentFromSwatch(c))}
+        />
+
+        <TweakSection label="Composição" />
+        <TweakRadio
+          label="Layout"
+          value={t.layout}
+          options={[
+            { value: 'left',     label: 'Esq.' },
+            { value: 'centered', label: 'Centro' },
+            { value: 'grid',     label: 'Grade' },
+          ]}
+          onChange={(v) => setTweak('layout', v)}
+        />
+        <TweakToggle
+          label="Mostrar grid"
+          value={t.showGrid}
+          onChange={(v) => setTweak('showGrid', v)}
+        />
+
+        <TweakSection label="Marca" />
+        <TweakToggle
+          label="Marca d'água (JG)"
+          value={t.watermark}
+          onChange={(v) => setTweak('watermark', v)}
+        />
+      </TweaksPanel>
+    </>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>
