@@ -7,6 +7,7 @@ window.MARCAS.ofmj = {
   cssClass: 'marca-ofmj',
   assetBase: 'marcas/ofmj/',
   allowTweaks: true,
+  tweakControls: ['palette', 'accent', 'layout', 'grid', 'watermark'],
   exportPixelRatio: 3,
   exportFilePrefix: 'ofmj',
   exportBg: null,
@@ -19,7 +20,7 @@ window.MARCAS.ofmj = {
     showGrid: false,
   },
   get templates() { return window.OFMJ_TEMPLATES || []; },
-  get galleries() { return window.OFMJ_GALLERIA || []; },
+  get galleries() { return window.OFMJ_GALERIA || []; },
   get palettes() { return window.PALETTES; },
   get accents() { return window.ACCENTS; },
 };
