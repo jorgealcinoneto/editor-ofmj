@@ -911,7 +911,27 @@ function T_StoryAsk({ tweak, content }) {
     askLabel: 'COLE AQUI A CAIXA DE PERGUNTAS',
     askHint: 'Sticker do Instagram · centralizada',
     footnote: 'Respondo nas DMs · entra no §03 se couber.',
+    headlineFont: 'eb-garamond',
     ...(content || {}),
+  };
+  const headlineFonts = {
+    'eb-garamond':         { family: "'EB Garamond', Georgia, serif",         weight: 600, tracking: '0' },
+    'instrument-serif':    { family: "'Instrument Serif', Georgia, serif",    weight: 400, tracking: '-0.01em' },
+    'fraunces':            { family: "'Fraunces', Georgia, serif",            weight: 600, tracking: '-0.02em' },
+    'syne':                { family: "'Syne', sans-serif",                    weight: 700, tracking: '-0.02em' },
+    'space-grotesk':       { family: "'Space Grotesk', sans-serif",           weight: 700, tracking: '-0.02em' },
+    'bricolage-grotesque': { family: "'Bricolage Grotesque', sans-serif",     weight: 700, tracking: '-0.02em' },
+    'unbounded':           { family: "'Unbounded', sans-serif",               weight: 700, tracking: '-0.03em' },
+    'anton':               { family: "'Anton', sans-serif",                   weight: 400, tracking: '0' },
+  };
+  const headlineCfg = headlineFonts[c.headlineFont] || headlineFonts['eb-garamond'];
+  const headlineStyle = {
+    fontSize: 84,
+    lineHeight: 1.08,
+    marginBottom: 24,
+    fontFamily: headlineCfg.family,
+    fontWeight: headlineCfg.weight,
+    letterSpacing: headlineCfg.tracking,
   };
   const overlayStyle = c.photo
     ? {
@@ -953,7 +973,7 @@ function T_StoryAsk({ tweak, content }) {
           <hr className="fmj-rule" style={{ width: 72, marginTop: 32, marginBottom: 48 }} />
           <p
             className="fmj-pull"
-            style={{ fontSize: 84, lineHeight: 1.08, marginBottom: 24 }}
+            style={headlineStyle}
             dangerouslySetInnerHTML={{ __html: c.headline }}
           />
           {c.sub && (
