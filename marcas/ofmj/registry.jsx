@@ -15,7 +15,7 @@ const ofmjAsset = (p) => (p && (p.startsWith('http') || p.startsWith('data:')) ?
 // declarations doutro bloco não são garantidas — window é o ponto de acordo.
 const {
   S01_Capa, S02_Definicao, S03_Citacao, S04_TeologiaEmCores, S05_Lista, S06_Fecho,
-  T_Liturgia, T_Leitura, T_Caderno, T_Story,
+  T_Liturgia, T_Leitura, T_Caderno, T_Story, T_StoryAsk,
 } = window;
 
 const TPL_GROUPS = {
@@ -351,6 +351,35 @@ const OFMJ_TEMPLATES = [
       { name: 'attribution', label: 'Atribuição',     type: 'text' },
     ],
     render: (content, tweak) => <T_Story tweak={tweak} content={content} />,
+  },
+  {
+    id: 't-story-ask',
+    name: 'Story · caixa de perguntas',
+    group: TPL_GROUPS.STORY,
+    w: 1080, h: 1920,
+    defaults: {
+      section: '§ 02',
+      category: 'CAIXA DE PERGUNTAS',
+      photo: ofmjAsset('uploads/nossa-senhora-perpetuo-socorro-quadro-icone-755738.webp'),
+      photoOpacity: 0.28,
+      headline: 'Uma dúvida real<br/>sobre <em>ícones</em>.',
+      sub: 'Que você nunca teve coragem de perguntar em voz alta.',
+      askLabel: 'COLE AQUI A CAIXA DE PERGUNTAS',
+      askHint: 'Sticker do Instagram · centralizada',
+      footnote: 'Respondo nas DMs · entra no §03 se couber.',
+    },
+    fields: [
+      { name: 'photo',        label: 'Foto de fundo (marca d\'água)', type: 'photo' },
+      { name: 'photoOpacity', label: 'Opacidade da foto (0–1)',         type: 'number', hint: 'Sugerido 0.20–0.35' },
+      { name: 'section',      label: 'Marca · número',                  type: 'text' },
+      { name: 'category',     label: 'Marca · categoria',               type: 'text' },
+      { name: 'headline',     label: 'Pergunta-âncora',                 type: 'rich',     hint: '<br/> para quebra; <em>itálico</em> realça' },
+      { name: 'sub',          label: 'Subtítulo curto',                 type: 'textarea' },
+      { name: 'askLabel',     label: 'Label da área da caixinha',       type: 'text' },
+      { name: 'askHint',      label: 'Dica sob a label',                type: 'text' },
+      { name: 'footnote',     label: 'Rodapé pastoral',                 type: 'text' },
+    ],
+    render: (content, tweak) => <T_StoryAsk tweak={tweak} content={content} />,
   },
 ];
 

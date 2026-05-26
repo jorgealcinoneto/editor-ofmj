@@ -896,9 +896,114 @@ function T_Story({ tweak, content }) {
   );
 }
 
+// Story · caixa de perguntas: foto em marca d'água + prompt + reserva visual
+// pra colar o sticker "Faça uma pergunta" do Instagram em cima do quadrado
+// pontilhado. Cor/posição calibradas pra a sticker ficar legível sem disputar
+// com a foto de fundo.
+function T_StoryAsk({ tweak, content }) {
+  const c = {
+    section: '§ 02',
+    category: 'CAIXA DE PERGUNTAS',
+    photo: '',
+    photoOpacity: 0.28,
+    headline: 'Uma dúvida real<br/>sobre <em>ícones</em>.',
+    sub: 'Que você nunca teve coragem de perguntar em voz alta.',
+    askLabel: 'COLE AQUI A CAIXA DE PERGUNTAS',
+    askHint: 'Sticker do Instagram · centralizada',
+    footnote: 'Respondo nas DMs · entra no §03 se couber.',
+    ...(content || {}),
+  };
+  const overlayStyle = c.photo
+    ? {
+        backgroundImage: `url("${c.photo}")`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        opacity: c.photoOpacity,
+      }
+    : null;
+  return (
+    <Frame tweak={tweak} layoutClass="l-centered" showGrid={tweak.showGrid}>
+      {overlayStyle && (
+        <div
+          aria-hidden="true"
+          style={{
+            position: 'absolute',
+            inset: 0,
+            ...overlayStyle,
+            mixBlendMode: 'multiply',
+            filter: 'grayscale(0.15) contrast(1.05)',
+            zIndex: 0,
+          }}
+        />
+      )}
+      {c.photo && (
+        <div
+          aria-hidden="true"
+          style={{
+            position: 'absolute',
+            inset: 0,
+            background: 'linear-gradient(180deg, rgba(244,237,224,0.55) 0%, rgba(244,237,224,0.15) 35%, rgba(244,237,224,0.15) 65%, rgba(244,237,224,0.75) 100%)',
+            zIndex: 1,
+          }}
+        />
+      )}
+      <div className="fmj-pad-story fmj-stack" style={{ position: 'relative', zIndex: 2, justifyContent: 'space-between' }}>
+        <div>
+          <Marker section={c.section} category={c.category} />
+          <hr className="fmj-rule" style={{ width: 72, marginTop: 32, marginBottom: 48 }} />
+          <p
+            className="fmj-pull"
+            style={{ fontSize: 84, lineHeight: 1.08, marginBottom: 24 }}
+            dangerouslySetInnerHTML={{ __html: c.headline }}
+          />
+          {c.sub && (
+            <p style={{ fontFamily: "'Inter', sans-serif", fontSize: 28, lineHeight: 1.4, color: 'var(--ink-soft)', maxWidth: '32ch' }}>
+              {c.sub}
+            </p>
+          )}
+        </div>
+
+        <div
+          aria-hidden="true"
+          style={{
+            width: '78%',
+            aspectRatio: '1 / 1',
+            border: '3px dashed var(--accent)',
+            borderRadius: 32,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: 12,
+            padding: 32,
+            background: 'rgba(255,255,255,0.35)',
+            backdropFilter: 'blur(2px)',
+            margin: '0 auto',
+          }}
+        >
+          <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 20, letterSpacing: '0.14em', color: 'var(--accent)', textTransform: 'uppercase' }}>
+            {c.askLabel}
+          </span>
+          <span style={{ fontFamily: "'Inter', sans-serif", fontSize: 22, color: 'var(--ink-soft)', textAlign: 'center' }}>
+            {c.askHint}
+          </span>
+        </div>
+
+        <div>
+          <p style={{ fontFamily: "'Inter', sans-serif", fontSize: 26, lineHeight: 1.4, color: 'var(--ink-soft)', textAlign: 'center', marginBottom: 24 }}>
+            {c.footnote}
+          </p>
+          <hr className="fmj-rule full" style={{ marginBottom: 32 }} />
+          <Footer tweak={tweak} />
+        </div>
+      </div>
+    </Frame>
+  );
+}
+
 // Exporta tudo para o escopo global (cada <script type=text/babel> é isolado).
 Object.assign(window, {
   PALETTES, ACCENTS,
   S01_Capa, S02_Definicao, S03_Citacao, S04_TeologiaEmCores, S05_Lista, S06_Fecho,
-  T_Liturgia, T_Leitura, T_Caderno, T_Story,
+  T_Liturgia, T_Leitura, T_Caderno, T_Story, T_StoryAsk,
 });
