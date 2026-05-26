@@ -1,0 +1,25 @@
+window.MARCAS = window.MARCAS || {};
+window.MARCAS.ofmj = {
+  id: 'ofmj',
+  name: 'O Fantástico Mundo de Jorge',
+  shortName: 'OFMJ',
+  handle: '@ofantasticomundodejorge',
+  cssClass: 'marca-ofmj',
+  assetBase: 'marcas/ofmj/',
+  allowTweaks: true,
+  exportPixelRatio: 3,
+  exportFilePrefix: 'ofmj',
+  exportBg: null,
+  barTheme: 'ofmj',
+  tweakDefaults: {
+    palette: 'pergaminho',
+    accent: 'borgonha',
+    layout: 'left',
+    watermark: false,
+    showGrid: false,
+  },
+  get templates() { return window.OFMJ_TEMPLATES || []; },
+  get galleries() { return window.OFMJ_GALLERIA || []; },
+  get palettes() { return window.PALETTES; },
+  get accents() { return window.ACCENTS; },
+};
