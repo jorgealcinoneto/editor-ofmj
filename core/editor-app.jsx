@@ -47,9 +47,9 @@ function PreviewIar({ tpl, content, tweak, scale }) {
       <div
         className="post-inner"
         data-export="root"
-        style={{ width: tpl.w, height: tpl.h, transform: `scale(${scale})`, transformOrigin: 'top left' }}
+        style={{ width: tpl.w, height: tpl.h, transform: `scale(${scale})`, transformOrigin: 'top left', '--fscale': tweak?.fontScale || 1 }}
       >
-        {tpl.render(content)}
+        {tpl.render(content, tweak)}
       </div>
     </div>
   );
@@ -83,6 +83,12 @@ function TweaksPanel({ tweak, onChange, marca }) {
     { v: 'left', label: 'Esq.' },
     { v: 'centered', label: 'Centro' },
     { v: 'grid', label: 'Grade' },
+  ];
+  const fontScales = [
+    { v: 1, label: 'A' },
+    { v: 1.12, label: 'A+' },
+    { v: 1.28, label: 'A++' },
+    { v: 1.45, label: 'A+++' },
   ];
   const swatchFor = (k) => {
     const p = marca.palettes[k];
@@ -131,6 +137,23 @@ function TweaksPanel({ tweak, onChange, marca }) {
           </div>
         </div>
       )}
+      {has('fontScale') && (
+        <div className="ed-tweaks__group">
+          <div className="ed-tweaks__label">Fonte</div>
+          <div className="ed-radio">
+            {fontScales.map((opt) => (
+              <button
+                key={opt.v}
+                type="button"
+                className={(tweak.fontScale || 1) === opt.v ? 'is-active' : ''}
+                onClick={() => onChange('fontScale', opt.v)}
+              >
+                {opt.label}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
       {has('layout') && (
         <div className="ed-tweaks__group">
           <div className="ed-tweaks__label">Layout</div>
@@ -160,6 +183,12 @@ function TweaksPanel({ tweak, onChange, marca }) {
             <label className="ed-toggle">
               <input type="checkbox" checked={!!tweak.watermark} onChange={(e) => onChange('watermark', e.target.checked)} />
               <span>Marca d&apos;água</span>
+            </label>
+          )}
+          {has('collab') && (
+            <label className="ed-toggle">
+              <input type="checkbox" checked={!!tweak.collab} onChange={(e) => onChange('collab', e.target.checked)} />
+              <span>Collab IAR</span>
             </label>
           )}
         </div>

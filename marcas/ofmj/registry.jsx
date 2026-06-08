@@ -16,10 +16,12 @@ const ofmjAsset = (p) => (p && (p.startsWith('http') || p.startsWith('data:')) ?
 const {
   S01_Capa, S02_Definicao, S03_Citacao, S04_TeologiaEmCores, S05_Lista, S06_Fecho,
   T_Liturgia, T_Leitura, T_Caderno, T_Story, T_StoryAsk,
+  MV_Capa, MV_Veredito, MV_Argumento, MV_Fecho,
 } = window;
 
 const TPL_GROUPS = {
   SERIE: 'Série · Ícones cristãos',
+  MITOS: 'Série · Mitos e Verdades',
   STANDALONE: 'Standalone',
   STORY: 'Story 9:16',
 };
@@ -225,6 +227,102 @@ const OFMJ_TEMPLATES = [
       { name: 'total', label: 'Total de páginas', type: 'number' },
     ],
     render: (content, tweak) => <S06_Fecho tweak={tweak} content={content} />,
+  },
+
+  // ── Série Mitos e Verdades ────────────────────────────────────
+  {
+    id: 'mv-capa',
+    name: 'MV · Capa',
+    group: TPL_GROUPS.MITOS,
+    w: 1080, h: 1350,
+    defaults: {
+      section: 'MV', category: 'MITOS E VERDADES', num: '1',
+      question: 'Henrique VIII <em>criou</em> a Igreja Anglicana?',
+      subtitle: '— a história não começa com um rei.',
+      folio: 1, total: 7,
+    },
+    fields: [
+      { name: 'section',  label: 'Marca · número',    type: 'text' },
+      { name: 'category', label: 'Marca · categoria', type: 'text' },
+      { name: 'num',      label: 'Número do episódio', type: 'text', hint: 'Vira #1 no selo da série' },
+      { name: 'question', label: 'Pergunta/mito (título)', type: 'rich', hint: '<em>itálico</em>, <br/> para quebra' },
+      { name: 'subtitle', label: 'Subtítulo',         type: 'text' },
+      { name: 'folio',    label: 'Página',            type: 'number' },
+      { name: 'total',    label: 'Total de páginas',  type: 'number' },
+    ],
+    render: (content, tweak) => <MV_Capa tweak={tweak} content={content} />,
+  },
+  {
+    id: 'mv-veredito',
+    name: 'MV · Veredito (Mito/Verdade)',
+    group: TPL_GROUPS.MITOS,
+    w: 1080, h: 1350,
+    defaults: {
+      section: 'MV', category: 'VEREDITO', verdict: 'mito',
+      claim: '“Henrique VIII criou a Igreja Anglicana para poder se divorciar.”',
+      body: 'É a versão mais popular da história. O problema? Ela deixa de fora <strong>mais de mil anos</strong> de cristianismo.',
+      folio: 2, total: 7,
+    },
+    fields: [
+      { name: 'section',  label: 'Marca · número',    type: 'text' },
+      { name: 'category', label: 'Marca · categoria', type: 'text' },
+      {
+        name: 'verdict', label: 'Veredito', type: 'select',
+        options: [
+          { value: 'mito', label: '❌ Mito (vermelho)' },
+          { value: 'verdade', label: '✅ Verdade (acento)' },
+        ],
+      },
+      { name: 'claim', label: 'Afirmação destacada', type: 'rich', hint: 'A citação do mito ou da verdade' },
+      { name: 'body',  label: 'Texto de apoio',      type: 'textarea-rich', hint: '<strong>negrito</strong> aceite' },
+      { name: 'folio', label: 'Página',              type: 'number' },
+      { name: 'total', label: 'Total de páginas',    type: 'number' },
+    ],
+    render: (content, tweak) => <MV_Veredito tweak={tweak} content={content} />,
+  },
+  {
+    id: 'mv-argumento',
+    name: 'MV · Argumento',
+    group: TPL_GROUPS.MITOS,
+    w: 1080, h: 1350,
+    defaults: {
+      section: 'MV', category: 'ARGUMENTO', symbol: '📜',
+      body: 'Quando Henrique VIII nasceu, em 1491, a Inglaterra já possuía igrejas, bispos, mosteiros, catedrais e uma tradição cristã consolidada.',
+      punch: 'Como criar aquilo que já existia antes de nascer?',
+      folio: 3, total: 7,
+    },
+    fields: [
+      { name: 'section',  label: 'Marca · número',    type: 'text' },
+      { name: 'category', label: 'Marca · categoria', type: 'text' },
+      { name: 'symbol', label: 'Símbolo/emoji', type: 'text', hint: 'Ex.: 📜 ⛪ 🏛️ — vazio para omitir' },
+      { name: 'body',   label: 'Texto corpo',  type: 'textarea-rich', hint: '<strong>negrito</strong> aceite' },
+      { name: 'punch',  label: 'Frase de remate (acento)', type: 'rich', hint: 'Opcional — frase de impacto ao fim' },
+      { name: 'folio',  label: 'Página',           type: 'number' },
+      { name: 'total',  label: 'Total de páginas', type: 'number' },
+    ],
+    render: (content, tweak) => <MV_Argumento tweak={tweak} content={content} />,
+  },
+  {
+    id: 'mv-fecho',
+    name: 'MV · Fecho · CTA',
+    group: TPL_GROUPS.MITOS,
+    w: 1080, h: 1350,
+    defaults: {
+      section: 'MV', category: 'FECHO', symbol: '💬',
+      title: 'E você?',
+      body: 'Já tinha ouvido que Henrique VIII criou a Igreja Anglicana? Que outro mito sobre o Anglicanismo devemos analisar na próxima publicação? <strong>Deixe nos comentários.</strong>',
+      folio: 7, total: 7,
+    },
+    fields: [
+      { name: 'section',  label: 'Marca · número',    type: 'text' },
+      { name: 'category', label: 'Marca · categoria', type: 'text' },
+      { name: 'symbol', label: 'Símbolo/emoji', type: 'text', hint: 'Ex.: 💬 — vazio para omitir' },
+      { name: 'title',  label: 'Pergunta principal', type: 'rich' },
+      { name: 'body',   label: 'Texto corpo',  type: 'textarea-rich', hint: '<strong>negrito</strong> aceite' },
+      { name: 'folio',  label: 'Página',           type: 'number' },
+      { name: 'total',  label: 'Total de páginas', type: 'number' },
+    ],
+    render: (content, tweak) => <MV_Fecho tweak={tweak} content={content} />,
   },
 
   // ── Standalone ────────────────────────────────────────────────

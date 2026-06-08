@@ -298,9 +298,12 @@ function Marker({ section, category, date }) {
 // Rodapé do post. Handle + folio (numeração). Marca d'água tipográfica
 // (monograma JG) controlada via tweak.
 function Footer({ tweak, folio, total }) {
+  const handle = tweak.collab
+    ? '@ofantasticomundodejorge \u00d7 @igrejaanglicanario'
+    : '@ofantasticomundodejorge';
   return (
     <div className="fmj-row">
-      <span className="fmj-handle">@ofantasticomundodejorge</span>
+      <span className="fmj-handle">{handle}</span>
       <div style={{ display: 'flex', alignItems: 'center', gap: 18 }}>
         {tweak.watermark && (
           <span
@@ -1021,9 +1024,147 @@ function T_StoryAsk({ tweak, content }) {
   );
 }
 
+// ─────────────────────────────────────────────────────────────
+// SÉRIE — Mitos e Verdades
+// Família reutilizável: capa, veredito (mito/verdade), argumento, fecho.
+// Mesma estética pergaminho/EB Garamond; veredito usa vermelho seco para
+// MITO e o acento da paleta para VERDADE.
+// ─────────────────────────────────────────────────────────────
+const MV_MITO_COLOR = '#8a2a1a';
+
+function MV_SerieTag({ num }) {
+  return (
+    <div style={{ display: 'inline-flex', alignItems: 'baseline', gap: 14, fontFamily: "'JetBrains Mono', monospace", fontSize: 18, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--accent)' }}>
+      <span style={{ fontWeight: 600 }}>Mitos &amp; Verdades</span>
+      {num && <span style={{ color: 'var(--ink-soft)' }}>#{num}</span>}
+    </div>
+  );
+}
+
+function MV_Capa({ tweak, content }) {
+  const c = {
+    section: 'MV',
+    category: 'MITOS E VERDADES',
+    num: '1',
+    question: 'Henrique VIII <em>criou</em> a Igreja Anglicana?',
+    subtitle: '— a história não começa com um rei.',
+    folio: 1,
+    total: 7,
+    ...(content || {}),
+  };
+  return (
+    <Frame tweak={tweak} layoutClass={`l-${tweak.layout}`} showGrid={tweak.showGrid}>
+      <div className="fmj-pad fmj-stack">
+        <Marker section={c.section} category={c.category} />
+        <div className="fmj-spacer" />
+        <MV_SerieTag num={c.num} />
+        <h1 className="fmj-title" style={{ fontSize: 116, lineHeight: 1.0, marginTop: 32, maxWidth: 880 }} dangerouslySetInnerHTML={{ __html: c.question }} />
+        <hr className="fmj-rule" style={{ width: 96, margin: '40px 0 0' }} />
+        {c.subtitle && <p className="fmj-subtitle">{c.subtitle}</p>}
+        <div className="fmj-spacer" />
+        <Footer tweak={tweak} folio={c.folio} total={c.total} />
+      </div>
+    </Frame>
+  );
+}
+
+function MV_Veredito({ tweak, content }) {
+  const c = {
+    section: 'MV',
+    category: 'VEREDITO',
+    verdict: 'mito',
+    claim: '“Henrique VIII criou a Igreja Anglicana para poder se divorciar.”',
+    body: 'É a versão mais popular da história. O problema? Ela deixa de fora <strong>mais de mil anos</strong> de cristianismo.',
+    folio: 2,
+    total: 7,
+    ...(content || {}),
+  };
+  const isMito = c.verdict !== 'verdade';
+  const badgeColor = isMito ? MV_MITO_COLOR : 'var(--accent)';
+  return (
+    <Frame tweak={tweak} layoutClass={`l-${tweak.layout}`} showGrid={tweak.showGrid}>
+      <div className="fmj-pad fmj-stack">
+        <Marker section={c.section} category={c.category} />
+        <div className="fmj-spacer" />
+        <div style={{ display: 'inline-flex', alignItems: 'center', gap: 18, alignSelf: 'flex-start', marginBottom: 48 }}>
+          <span style={{ width: 56, height: 56, borderRadius: '50%', background: badgeColor, color: '#efe7d6', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontSize: 30, fontWeight: 700 }}>
+            {isMito ? '\u2715' : '\u2713'}
+          </span>
+          <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 34, fontWeight: 600, letterSpacing: '0.12em', textTransform: 'uppercase', color: badgeColor }}>
+            {isMito ? 'Mito' : 'Verdade'}
+          </span>
+        </div>
+        <p className="fmj-pull" style={{ fontSize: 66, lineHeight: 1.14, marginBottom: 44, maxWidth: 880 }} dangerouslySetInnerHTML={{ __html: c.claim }} />
+        <p className="fmj-body" style={{ maxWidth: 820 }} dangerouslySetInnerHTML={{ __html: c.body }} />
+        <div className="fmj-spacer" />
+        <Footer tweak={tweak} folio={c.folio} total={c.total} />
+      </div>
+    </Frame>
+  );
+}
+
+function MV_Argumento({ tweak, content }) {
+  const c = {
+    section: 'MV',
+    category: 'ARGUMENTO',
+    symbol: '\uD83D\uDCDC',
+    body: 'Quando Henrique VIII nasceu, em 1491, a Inglaterra já possuía igrejas, bispos, mosteiros, catedrais e uma tradição cristã consolidada.',
+    punch: 'Como criar aquilo que já existia antes de nascer?',
+    folio: 3,
+    total: 7,
+    ...(content || {}),
+  };
+  return (
+    <Frame tweak={tweak} layoutClass={`l-${tweak.layout}`} showGrid={tweak.showGrid}>
+      <div className="fmj-pad fmj-stack">
+        <Marker section={c.section} category={c.category} />
+        <div className="fmj-spacer" />
+        {c.symbol && <div style={{ fontSize: 104, lineHeight: 1, marginBottom: 44 }}>{c.symbol}</div>}
+        {c.body && <p className="fmj-body" style={{ fontSize: 34, lineHeight: 1.4, maxWidth: 820 }} dangerouslySetInnerHTML={{ __html: c.body }} />}
+        {c.punch && (
+          <>
+            <hr className="fmj-rule" style={{ width: 72, margin: '44px 0 32px' }} />
+            <p className="fmj-pull" style={{ fontSize: 56, lineHeight: 1.16, color: 'var(--accent)', maxWidth: 820 }} dangerouslySetInnerHTML={{ __html: c.punch }} />
+          </>
+        )}
+        <div className="fmj-spacer" />
+        <Footer tweak={tweak} folio={c.folio} total={c.total} />
+      </div>
+    </Frame>
+  );
+}
+
+function MV_Fecho({ tweak, content }) {
+  const c = {
+    section: 'MV',
+    category: 'FECHO',
+    symbol: '\uD83D\uDCAC',
+    title: 'E você?',
+    body: 'Já tinha ouvido que Henrique VIII criou a Igreja Anglicana? Que outro mito sobre o Anglicanismo devemos analisar na próxima publicação? <strong>Deixe nos comentários.</strong>',
+    folio: 7,
+    total: 7,
+    ...(content || {}),
+  };
+  return (
+    <Frame tweak={tweak} layoutClass={`l-${tweak.layout}`} showGrid={tweak.showGrid}>
+      <div className="fmj-pad fmj-stack">
+        <Marker section={c.section} category={c.category} />
+        <div className="fmj-spacer" />
+        {c.symbol && <div style={{ fontSize: 96, lineHeight: 1, marginBottom: 40 }}>{c.symbol}</div>}
+        <h1 className="fmj-title" style={{ fontSize: 104, lineHeight: 1.0, marginBottom: 36 }} dangerouslySetInnerHTML={{ __html: c.title }} />
+        <p className="fmj-body" style={{ fontSize: 32, lineHeight: 1.4, maxWidth: 840 }} dangerouslySetInnerHTML={{ __html: c.body }} />
+        <div className="fmj-spacer" />
+        <hr className="fmj-rule thick full" style={{ marginBottom: 32 }} />
+        <Footer tweak={tweak} folio={c.folio} total={c.total} />
+      </div>
+    </Frame>
+  );
+}
+
 // Exporta tudo para o escopo global (cada <script type=text/babel> é isolado).
 Object.assign(window, {
   PALETTES, ACCENTS,
   S01_Capa, S02_Definicao, S03_Citacao, S04_TeologiaEmCores, S05_Lista, S06_Fecho,
   T_Liturgia, T_Leitura, T_Caderno, T_Story, T_StoryAsk,
+  MV_Capa, MV_Veredito, MV_Argumento, MV_Fecho,
 });
